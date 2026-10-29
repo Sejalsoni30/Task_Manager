@@ -1,133 +1,201 @@
 # 📋 TaskFlow - MERN Stack Task Manager
 
-A complete, modern, and beginner-friendly full-stack **Task Manager** web application built with MongoDB, Express.js, React, and Node.js (MERN), styled with Tailwind CSS.
+TaskFlow is a modern, responsive, and full-featured Task Management web application built with the MERN stack (MongoDB, Express.js, React, Node.js) and styled with Tailwind CSS. It allows users to efficiently manage day-to-day tasks with real-time feedback, status tracking, and intuitive filtering.
+
+> **Note:** API endpoints were thoroughly tested using Postman before integrating them with the React frontend.
 
 ---
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Full CRUD Functionality:** Create, Read, Update, and Delete tasks in real-time.
-- **Task Schema:**
-  - `title` (required string, trimmed)
-  - `description` (optional text)
-  - `status` (`Pending`, `In Progress`, `Completed`)
-  - `priority` (`Low`, `Medium`, `High`)
-  - `dueDate` (date selector with "Overdue" detection)
-- **Live Search & Filters:**
-  - Real-time case-insensitive keyword search on title and description.
-  - Filter tasks dynamically by status and priority.
-  - Sort by newest, oldest, or due date (earliest/latest).
-- **Interactive UI:**
-  - Modern dashboard with live status counter badges (Total, Pending, In Progress, Completed).
-  - Quick status dropdown directly on each task card.
-  - Safe deletion modal with confirmation before permanent removal.
-  - Reusable modal dialog for both task creation and editing.
-  - Auto-dismissing toast notifications for immediate user feedback.
+- **Task Creation:** Add new tasks with title, description, status, priority, and due dates.
+- **Task Updating:** Edit existing tasks seamlessly via a dedicated modal or update status directly from task cards.
+- **Task Deletion:** Remove tasks with a safe confirmation popup to prevent accidental data loss.
+- **Title & Description Search:** Real-time, debounced search across task titles and descriptions.
+- **Status & Priority Filtering:** Filter tasks by status (`Pending`, `In Progress`, `Completed`) and priority (`Low`, `Medium`, `High`).
+- **Flexible Sorting:** Sort tasks by newest first, oldest first, or by earliest/latest due date.
+- **100% Responsive Design:** Optimized for mobile phones, tablets, laptops, and desktop screens.
 
 ---
 
-## 🏗️ Project Structure
+## 🛠️ Tech Stack Used
 
-```text
-task-manager/
-├── backend/
-│   ├── .env                 # Environment variables (PORT, MONGO_URI)
-│   ├── .env.example         # Template for environment variables
-│   ├── package.json         # Backend dependencies & scripts
-│   └── server.js            # Express server, MongoDB connection, & REST API routes
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx       # Header with app branding & live task statistics
-│   │   │   ├── TaskFilters.jsx  # Search bar, status/priority dropdowns, sort controls
-│   │   │   ├── TaskList.jsx     # Responsive grid & empty-state handlers
-│   │   │   ├── TaskCard.jsx     # Task card item with priority/status tags & actions
-│   │   │   ├── TaskModal.jsx    # Create/Edit task modal dialog with validation
-│   │   │   ├── DeleteModal.jsx  # Delete confirmation popup
-│   │   │   └── Toast.jsx        # Success/Error alert notifications
-│   │   ├── api.js           # Centralized Axios client for backend endpoints
-│   │   ├── App.jsx          # Main React state orchestration
-│   │   ├── main.jsx         # React application entry point
-│   │   └── index.css        # Tailwind CSS imports
-│   ├── index.html           # HTML template
-│   ├── vite.config.js       # Vite + Tailwind configuration
-│   └── package.json         # Frontend dependencies & scripts
-└── README.md                # Project documentation & setup instructions
+### Frontend
+- **React 19 (via Vite):** Declarative, component-based user interface.
+- **Tailwind CSS v4:** Modern, utility-first CSS framework for responsive layouts.
+- **Lucide React:** Clean and lightweight SVG icon set.
+- **Axios:** Promise-based HTTP client for API communication.
+
+### Backend
+- **Node.js:** Asynchronous, event-driven JavaScript runtime environment.
+- **Express.js:** Fast, minimalist web framework for RESTful routing and middleware.
+- **MongoDB:** Scalable NoSQL document database.
+- **Mongoose:** Object Data Modeling (ODM) library for schema validation and business logic.
+- **dotenv & cors:** Environment variable configuration and cross-origin resource sharing.
+
+---
+
+## ⚙️ Prerequisites & Environment Setup
+
+### Prerequisites
+Make sure the following are installed on your machine:
+- **Node.js** (v18.0.0 or higher) - [Download Node.js](https://nodejs.org/)
+- **npm** (v9.0.0 or higher)
+- **MongoDB** (A local MongoDB instance running at `mongodb://127.0.0.1:27017` or a free cloud cluster on [MongoDB Atlas](https://www.mongodb.com/atlas))
+
+### Environment Configuration
+Create a `.env` file inside the `backend/` directory:
+
+```bash
+# Navigate to the backend directory
+cd backend
+
+# Create .env file (or copy from .env.example)
+cp .env.example .env
+```
+
+Add your environment variables inside `backend/.env`:
+
+```env
+# Server Port
+PORT=5000
+
+# MongoDB Connection String:
+# Cloud MongoDB Atlas:
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/task-manager?retryWrites=true&w=majority
+
+# OR Local MongoDB:
+# MONGO_URI=mongodb://127.0.0.1:27017/task-manager
 ```
 
 ---
 
-## ⚙️ Prerequisites
+## 🗄️ Database Schema & Sample Data
 
-Make sure you have the following installed on your machine:
-- **Node.js** (v18.x or later recommended — check with `node -v`)
-- **npm** (v9.x or later — check with `npm -v`)
-- **MongoDB**: Either a free cloud cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) or a local MongoDB community server running at `mongodb://127.0.0.1:27017`.
+### Mongoose Task Schema (`backend/server.js`)
+
+```javascript
+const taskSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, 'Task title is required'],
+      trim: true,
+      maxlength: [120, 'Title cannot exceed 120 characters']
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+    status: {
+      type: String,
+      enum: ['Pending', 'In Progress', 'Completed'],
+      default: 'Pending'
+    },
+    priority: {
+      type: String,
+      enum: ['Low', 'Medium', 'High'],
+      default: 'Medium'
+    },
+    dueDate: {
+      type: Date,
+      default: null
+    }
+  },
+  {
+    timestamps: true // Automatically generates createdAt and updatedAt
+  }
+);
+```
+
+### Sample Data (JSON)
+
+#### Example 1: In Progress Task with High Priority
+```json
+{
+  "_id": "67215a3bcce2e1367933b13a",
+  "title": "Build Authentication Module",
+  "description": "Implement JWT-based user login and registration with bcrypt encryption.",
+  "status": "In Progress",
+  "priority": "High",
+  "dueDate": "2026-11-10T00:00:00.000Z",
+  "createdAt": "2026-10-29T15:49:52.535Z",
+  "updatedAt": "2026-10-29T16:20:10.120Z",
+  "__v": 0
+}
+```
+
+#### Example 2: Completed Task with Medium Priority
+```json
+{
+  "_id": "67215a3bcce2e1367933b13b",
+  "title": "Set Up Tailwind CSS v4",
+  "description": "Configure Tailwind with Vite and establish responsive breakpoint layouts.",
+  "status": "Completed",
+  "priority": "Medium",
+  "dueDate": "2026-10-29T00:00:00.000Z",
+  "createdAt": "2026-10-29T14:30:00.000Z",
+  "updatedAt": "2026-10-29T17:15:22.000Z",
+  "__v": 0
+}
+```
 
 ---
 
-## 🚀 Environment Setup & Installation
+## 📡 API Endpoints Documentation
 
-### 1. Backend Setup
+Base URL: `http://localhost:5000/api`
 
-1. Open a terminal and navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
-
-2. Install backend dependencies (if not already installed):
-   ```bash
-   npm install
-   ```
-
-3. Create or verify your `.env` file in the `backend/` folder:
-   ```env
-   PORT=5000
-   MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/task-manager?retryWrites=true&w=majority
-   ```
-   > **Note for Local MongoDB:** If you are using local MongoDB, set:
-   > `MONGO_URI=mongodb://127.0.0.1:27017/task-manager`
-
-4. Start the backend server:
-   ```bash
-   # Development mode with auto-reload (Node 18+)
-   npm run dev
-
-   # Or standard production mode:
-   npm start
-   ```
-   The backend will start on **`http://localhost:5000`**.
-
----
-
-### 2. Frontend Setup
-
-1. Open a second terminal window and navigate to the `frontend` folder:
-   ```bash
-   cd frontend
-   ```
-
-2. Install frontend dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the Vite development server:
-   ```bash
-   npm run dev
-   ```
-   The frontend application will run on **`http://localhost:5173`**.
-
----
-
-## 📡 REST API Reference
-
-| Method | Endpoint | Description | Query / Body Parameters |
+| Method | Endpoint | Description | Request Body / Query Params |
 | :--- | :--- | :--- | :--- |
-| **GET** | `/api/tasks` | Get all tasks (supports search, filter, and sorting) | `?search=term&status=Pending&priority=High&sort=newest` |
-| **GET** | `/api/tasks/:id` | Get a specific task by its MongoDB `_id` | URL param `id` |
-| **POST** | `/api/tasks` | Create a new task | JSON body: `{ title, description, status, priority, dueDate }` |
-| **PUT** | `/api/tasks/:id` | Update an existing task | JSON body: fields to update |
-| **DELETE** | `/api/tasks/:id` | Permanently delete a task | URL param `id` |
-| **GET** | `/api/health` | Health check route | Returns `{ status: 'ok', uptime }` |
+| **GET** | `/health` | Server health check and uptime | None |
+| **GET** | `/tasks` | Retrieve tasks with optional search, filter, and sort | Query: `?search=...&status=...&priority=...&sort=...` |
+| **GET** | `/tasks/:id` | Retrieve a specific task by its MongoDB `_id` | URL param: `:id` |
+| **POST** | `/tasks` | Create a new task | Body: `{ title, description, status, priority, dueDate }` |
+| **PUT** | `/tasks/:id` | Update an existing task | Body: fields to update (e.g. `{ status: "Completed" }`) |
+| **DELETE** | `/tasks/:id` | Permanently delete a task | URL param: `:id` |
 
+---
+
+## 🚀 Installation & Run Instructions
+
+### 1. Clone & Navigate to Project Directory
+```bash
+git clone <repository-url>
+cd task-manager
+```
+
+### 2. Backend Setup & Run
+Open a terminal for the backend:
+
+```bash
+# 1. Navigate to the backend folder
+cd backend
+
+# 2. Install backend dependencies
+npm install
+
+# 3. Start backend in development mode (with auto-reload)
+npm run dev
+```
+
+The backend server will start on **`http://localhost:5000`**.
+
+### 3. Frontend Setup & Run
+Open a second terminal for the frontend:
+
+```bash
+# 1. Navigate to the frontend folder
+cd frontend
+
+# 2. Install frontend dependencies
+npm install
+
+# 3. Start frontend development server
+npm run dev
+```
+
+The frontend client will start on **`http://localhost:5173`**.
+
+Open **`http://localhost:5173`** in your browser to start managing tasks.
