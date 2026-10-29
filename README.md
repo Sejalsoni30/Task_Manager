@@ -13,7 +13,7 @@ TaskFlow is a modern, responsive, and full-featured Task Management web applicat
 - **Task Deletion:** Remove tasks with a safe confirmation popup to prevent accidental data loss.
 - **Title & Description Search:** Real-time, debounced search across task titles and descriptions.
 - **Status & Priority Filtering:** Filter tasks by status (`Pending`, `In Progress`, `Completed`) and priority (`Low`, `Medium`, `High`).
-- **Flexible Sorting:** Sort tasks by newest first, oldest first, or by earliest/latest due date.
+- **Flexible Sorting:** Sort tasks by Due Date (earliest/latest), Priority (High to Medium to Low), or Creation Date (newest/oldest).
 - **100% Responsive Design:** Optimized for mobile phones, tablets, laptops, and desktop screens.
 
 ---

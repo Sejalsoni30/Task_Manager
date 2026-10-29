@@ -132,19 +132,43 @@ app.get('/api/tasks', async (req, res) => {
       query.priority = priority;
     }
 
-    // Determine sorting order (default: newest first)
-    let sortOptions = { createdAt: -1 };
-    if (sort === 'dueDate_asc') {
-      sortOptions = { dueDate: 1 };
+    // Determine sorting options for Mongoose .sort() query method
+    let sortOptions = { createdAt: -1 }; // default: newest first
+
+    if (sort === 'dueDate' || sort === 'dueDate_asc') {
+      sortOptions = { dueDate: 1, createdAt: -1 }; // Earliest due date first
     } else if (sort === 'dueDate_desc') {
-      sortOptions = { dueDate: -1 };
+      sortOptions = { dueDate: -1, createdAt: -1 }; // Latest due date first
+    } else if (sort === 'priority_desc' || sort === 'priority') {
+      sortOptions = { priority: 1, createdAt: -1 };
+    } else if (sort === 'priority_asc') {
+      sortOptions = { priority: -1, createdAt: -1 };
     } else if (sort === 'oldest') {
       sortOptions = { createdAt: 1 };
     } else if (sort === 'newest') {
       sortOptions = { createdAt: -1 };
     }
 
-    const tasks = await Task.find(query).sort(sortOptions);
+    // Execute query using Mongoose .find() and .sort()
+    let tasks = await Task.find(query).sort(sortOptions);
+
+    // Logical priority ordering: High -> Medium -> Low (or reverse)
+    if (sort === 'priority' || sort === 'priority_desc') {
+      const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+      tasks = tasks.sort((a, b) => (priorityOrder[a.priority] || 4) - (priorityOrder[b.priority] || 4));
+    } else if (sort === 'priority_asc') {
+      const priorityOrder = { Low: 1, Medium: 2, High: 3 };
+      tasks = tasks.sort((a, b) => (priorityOrder[a.priority] || 4) - (priorityOrder[b.priority] || 4));
+    } else if (sort === 'dueDate' || sort === 'dueDate_asc') {
+      // Put tasks with active due dates ahead of tasks with no due date (null)
+      tasks = tasks.sort((a, b) => {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return new Date(a.dueDate) - new Date(b.dueDate);
+      });
+    }
+
     return res.status(200).json(tasks);
   } catch (error) {
     console.error('Error fetching tasks:', error);

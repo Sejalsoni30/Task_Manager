@@ -93,10 +93,12 @@ export default function TaskFilters({
               className="w-full lg:w-auto px-2.5 sm:px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm font-medium text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer"
               aria-label="Sort tasks order"
             >
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="dueDate_asc">Due: Earliest</option>
-              <option value="dueDate_desc">Due: Latest</option>
+              <option value="newest">Sort by: Newest First</option>
+              <option value="oldest">Sort by: Oldest First</option>
+              <option value="dueDate_asc">Sort by Due Date (Earliest)</option>
+              <option value="dueDate_desc">Sort by Due Date (Latest)</option>
+              <option value="priority_desc">Sort by Priority (High to Medium to Low)</option>
+              <option value="priority_asc">Sort by Priority (Low to Medium to High)</option>
             </select>
           </div>
 
