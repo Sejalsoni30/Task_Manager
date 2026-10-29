@@ -1,4 +1,3 @@
-import React from 'react';
 import TaskCard from './TaskCard';
 import { ClipboardList, Plus, SearchX, Loader2 } from 'lucide-react';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Navbar from './components/Navbar';
 import TaskFilters from './components/TaskFilters';
 import TaskList from './components/TaskList';
@@ -85,9 +85,13 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [loadTasks]);
 
-  // Load stats on mount
+  // Initial stats load on mount (asynchronous)
   useEffect(() => {
-    loadGlobalStats();
+    const timer = setTimeout(() => {
+      loadGlobalStats();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [loadGlobalStats]);
 
   // Calculate live statistics for navbar
@@ -243,6 +247,7 @@ export default function App() {
 
       {/* 5. Modals & Notifications */}
       <TaskModal
+        key={taskToEdit ? taskToEdit._id : 'create'}
         isOpen={isTaskModalOpen}
         onClose={() => setIsTaskModalOpen(false)}
         onSave={handleSaveTask}

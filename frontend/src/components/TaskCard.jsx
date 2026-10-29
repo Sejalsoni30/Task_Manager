@@ -1,4 +1,3 @@
-import React from 'react';
 import { Calendar, Edit3, Trash2, CheckCircle2, Clock, PlayCircle } from 'lucide-react';
 
 /**

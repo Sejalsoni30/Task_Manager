@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckSquare, Plus, Clock, PlayCircle, CheckCircle, ListTodo } from 'lucide-react';
 
 /**

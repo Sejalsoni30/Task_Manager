@@ -1,44 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Check, Loader2 } from 'lucide-react';
+
+// Format existing date to YYYY-MM-DD for standard date input
+const formatDateForInput = (dateStr) => {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
 
 /**
  * TaskModal Component (100% Mobile & Desktop Responsive):
  * Reusable modal for Creating and Editing a task.
- * Fully scroll-safe with max-h-[90vh] so mobile virtual keyboards never break the UI.
+ * State is initialized directly from taskToEdit (paired with React key prop in App.jsx).
  */
 export default function TaskModal({ isOpen, onClose, onSave, taskToEdit, isLoading }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [status, setStatus] = useState('Pending');
-  const [priority, setPriority] = useState('Medium');
-  const [dueDate, setDueDate] = useState('');
+  const [title, setTitle] = useState(taskToEdit ? taskToEdit.title || '' : '');
+  const [description, setDescription] = useState(taskToEdit ? taskToEdit.description || '' : '');
+  const [status, setStatus] = useState(taskToEdit ? taskToEdit.status || 'Pending' : 'Pending');
+  const [priority, setPriority] = useState(taskToEdit ? taskToEdit.priority || 'Medium' : 'Medium');
+  const [dueDate, setDueDate] = useState(taskToEdit ? formatDateForInput(taskToEdit.dueDate) : '');
   const [validationError, setValidationError] = useState('');
-
-  // Pre-fill form when editing an existing task, or reset when creating
-  useEffect(() => {
-    if (taskToEdit) {
-      setTitle(taskToEdit.title || '');
-      setDescription(taskToEdit.description || '');
-      setStatus(taskToEdit.status || 'Pending');
-      setPriority(taskToEdit.priority || 'Medium');
-      if (taskToEdit.dueDate) {
-        const d = new Date(taskToEdit.dueDate);
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        setDueDate(`${yyyy}-${mm}-${dd}`);
-      } else {
-        setDueDate('');
-      }
-    } else {
-      setTitle('');
-      setDescription('');
-      setStatus('Pending');
-      setPriority('Medium');
-      setDueDate('');
-    }
-    setValidationError('');
-  }, [taskToEdit, isOpen]);
 
   if (!isOpen) return null;
 

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Search, X, Filter, ArrowUpDown, RotateCcw } from 'lucide-react';
+import { Search, X, RotateCcw } from 'lucide-react';
 
 /**
  * TaskFilters Component (100% Responsive):
