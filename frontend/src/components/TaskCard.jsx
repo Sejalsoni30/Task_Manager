@@ -69,16 +69,15 @@ export default function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
 
   return (
     <div
-      className={`bg-white rounded-xl border transition-all duration-200 p-4 sm:p-5 flex flex-col justify-between hover:shadow-md ${
-        isCompleted
+      className={`bg-white rounded-xl border transition-all duration-200 p-4 sm:p-5 flex flex-col justify-between hover:shadow-md ${isCompleted
           ? 'border-emerald-200 bg-emerald-50/20'
           : 'border-slate-200 hover:border-indigo-300'
-      }`}
+        }`}
     >
       <div>
         {/* Top Header: Status Badges & Quick Status Selector */}
         <div className="flex items-center justify-between gap-2 mb-3">
-          
+
           <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
             {/* Status Badge */}
             <span
@@ -114,9 +113,8 @@ export default function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
 
         {/* Task Title */}
         <h3
-          className={`text-sm sm:text-base font-semibold text-slate-900 leading-snug break-words ${
-            isCompleted ? 'line-through text-slate-400' : ''
-          }`}
+          className={`text-sm sm:text-base font-semibold text-slate-900 leading-snug wrap-break-word ${isCompleted ? 'line-through text-slate-400' : ''
+            }`}
         >
           {task.title}
         </h3>
@@ -124,9 +122,8 @@ export default function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
         {/* Task Description */}
         {task.description && (
           <p
-            className={`mt-1.5 sm:mt-2 text-xs sm:text-sm text-slate-600 line-clamp-3 whitespace-pre-line break-words ${
-              isCompleted ? 'text-slate-400' : ''
-            }`}
+            className={`mt-1.5 sm:mt-2 text-xs sm:text-sm text-slate-600 line-clamp-3 whitespace-pre-line wrap-break-word ${isCompleted ? 'text-slate-400' : ''
+              }`}
           >
             {task.description}
           </p>
@@ -135,16 +132,15 @@ export default function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
 
       {/* Card Footer: Due Date & Action Buttons */}
       <div className="mt-4 sm:mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-        
+
         {/* Due Date Indicator */}
         <div className="flex items-center gap-1.5 min-w-0">
           {task.dueDate ? (
             <span
-              className={`inline-flex items-center gap-1 font-medium truncate ${
-                isOverdue()
+              className={`inline-flex items-center gap-1 font-medium truncate ${isOverdue()
                   ? 'text-rose-600 font-semibold bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200 text-[11px]'
                   : 'text-slate-600'
-              }`}
+                }`}
             >
               <Calendar className="w-3.5 h-3.5 shrink-0" />
               <span>{formatDueDate(task.dueDate)}</span>
@@ -165,7 +161,7 @@ export default function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
           >
             <Edit3 className="w-4 h-4" />
           </button>
-          
+
           <button
             onClick={() => onDelete(task)}
             className="p-1.5 sm:p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"

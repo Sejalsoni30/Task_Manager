@@ -20,7 +20,7 @@ export default function DeleteModal({ isOpen, onClose, onConfirm, task, isDeleti
 
           <div className="flex-1 min-w-0">
             <h3 className="text-base sm:text-lg font-bold text-slate-900">Delete Task</h3>
-            <p className="mt-1 text-xs sm:text-sm text-slate-600 break-words leading-relaxed">
+            <p className="mt-1 text-xs sm:text-sm text-slate-600 wrap-break-word leading-relaxed">
               Are you sure you want to delete <span className="font-semibold text-slate-900">"{task.title}"</span>? This action cannot be undone.
             </p>
           </div>
